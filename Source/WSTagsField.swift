@@ -389,16 +389,16 @@ open class WSTagsField: UIView {
 
     // MARK: - Adding / Removing Tags
 
-    open func addTags(_ tags: [String]) {
-        tags.forEach() { addTag($0) }
+    open func addTags(_ tags: [(String, String)]) {
+        tags.forEach() { addTag($0, $1) }
     }
 
     open func addTags(_ tags: [WSTag]) {
         tags.forEach() { addTag($0) }
     }
 
-    open func addTag(_ tag: String) {
-        addTag(WSTag(tag))
+    open func addTag(_ tag: String,_ token: String) {
+        addTag(WSTag(tag, token))
     }
 
     open func addTag(_ tag: WSTag) {
@@ -456,8 +456,8 @@ open class WSTagsField: UIView {
         repositionViews()
     }
 
-    open func removeTag(_ tag: String) {
-        removeTag(WSTag(tag))
+    open func removeTag(_ token: String) {
+        removeTag(WSTag("", token))
     }
 
     open func removeTag(_ tag: WSTag) {
@@ -493,7 +493,7 @@ open class WSTagsField: UIView {
     open func tokenizeTextFieldText() -> WSTag? {
         let text = self.textField.text?.trimmingCharacters(in: CharacterSet.whitespaces) ?? ""
         if text.isEmpty == false && (onVerifyTag?(self, text) ?? true) {
-            let tag = WSTag(text)
+            let tag = WSTag(text, text)
             addTag(tag)
             self.textField.text = ""
             onTextFieldDidChange(self.textField)

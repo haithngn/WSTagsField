@@ -11,17 +11,20 @@ import Foundation
 public struct WSTag: Hashable {
 
     public let text: String
+    
+    public let token: String
 
-    public init(_ text: String) {
+    public init(_ text: String,_ token: String) {
         self.text = text
+        self.token = token
     }
 
     public var hashValue: Int {
-        return self.text.hashValue
+        return self.token.hashValue
     }
 
     public func equals(_ other: WSTag) -> Bool {
-        return self.text == other.text
+        return self.token == other.token
     }
 
 }
