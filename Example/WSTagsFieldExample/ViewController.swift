@@ -56,6 +56,19 @@ class ViewController: UIViewController {
         tagsField.onDidUnselectTagView = { _, tagView in
             print("Unselect \(tagView)")
         }
+        
+        tagsField.onShouldReturn = { (field:WSTagsField) -> Bool in
+            debugPrint(field.text)
+            
+            return false
+        }
+        
+        tagsField.onVerifyTag = { field, text in
+            debugPrint(field.text)
+            debugPrint(text)
+            
+            return false
+        }
 
         testButton.frame = CGRect(x: 0, y: 250, width: 100, height: 44)
         testButton.backgroundColor = .white
@@ -85,10 +98,10 @@ class ViewController: UIViewController {
 
         // Dealloc test
         let field = WSTagsField()
-        field.addTag("test1")
-        field.addTag("test2")
-        field.addTag("test3")
-        field.addTag("test4")
+        field.addTag("test1","test1")
+        field.addTag("test2","test2")
+        field.addTag("test3","test3")
+        field.addTag("test4","test4")
     }
     
     func didTouchReadOnlyToggleButton(_ sender: AnyObject) {
