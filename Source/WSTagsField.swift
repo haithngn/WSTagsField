@@ -248,6 +248,7 @@ open class WSTagsField: UIView{
 
         textField.backgroundColor = .clear
         textField.autocorrectionType = UITextAutocorrectionType.no
+        textField.textDragInteraction?.isEnabled = false
         textField.autocapitalizationType = UITextAutocapitalizationType.none
         textField.spellCheckingType = .no
         textField.delegate = self
