@@ -5,10 +5,11 @@
 //  Created by Ricardo Pereira on 12/05/16.
 //  Copyright © 2016 Whitesmith. All rights reserved.
 //
-
+import MobileCoreServices
 import UIKit
 
 open class WSTagView: UIView {
+    
 
     internal static let xPadding: CGFloat = 6.0
     internal static let yPadding: CGFloat = 2.0
@@ -17,6 +18,13 @@ open class WSTagView: UIView {
     fileprivate let textLabel = UILabel()
 
     open var displayText: String = "" {
+        didSet {
+            updateLabelText()
+            setNeedsDisplay()
+        }
+    }
+    
+    open var token: String = "" {
         didSet {
             updateLabelText()
             setNeedsDisplay()
@@ -76,6 +84,7 @@ open class WSTagView: UIView {
         }
     }
 
+    
 
     public init(tag: WSTag) {
         super.init(frame: CGRect.zero)
@@ -87,7 +96,7 @@ open class WSTagView: UIView {
         textColor = .white
         selectedColor = .gray
         selectedTextColor = .black
-
+        token = tag.token
         textLabel.frame = CGRect(x: WSTagView.xPadding, y: WSTagView.yPadding, width: 0, height: 0)
         textLabel.font = font
         textLabel.textColor = .white
