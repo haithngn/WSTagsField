@@ -240,6 +240,7 @@ open class WSTagsField: UIView, UITextDropDelegate{
     }
     
     
+    @available(iOSApplicationExtension 11.0, *)
     public func textDroppableView(_ textDroppableView: UIView, proposalForDrop drop: UITextDropRequest) -> UITextDropProposal {
         if textDroppableView.hashValue == textField.hashValue {
             return UITextDropProposal.init(operation: UIDropOperation.cancel)
@@ -256,9 +257,12 @@ open class WSTagsField: UIView, UITextDropDelegate{
 
         textField.backgroundColor = .clear
         textField.autocorrectionType = UITextAutocorrectionType.no
-        textField.textDragInteraction?.isEnabled = false
-        textField.textDropInteraction?.allowsSimultaneousDropSessions = false
-        textField.textDropDelegate = self
+        if #available(iOSApplicationExtension 11.0, *) {
+            textField.textDragInteraction?.isEnabled = false
+            textField.textDropInteraction?.allowsSimultaneousDropSessions = false
+            textField.textDropDelegate = self
+        }
+        
         textField.autocapitalizationType = UITextAutocapitalizationType.none
         textField.spellCheckingType = .no
         textField.delegate = self
