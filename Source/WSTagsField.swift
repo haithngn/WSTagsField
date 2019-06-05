@@ -8,7 +8,7 @@
 
 import UIKit
 
-open class WSTagsField: UIView {
+open class WSTagsField: UIView, UITextDropDelegate{
 
     fileprivate static let HSPACE: CGFloat = 0.0
     fileprivate static let TEXT_FIELD_HSPACE: CGFloat = WSTagView.xPadding
@@ -201,6 +201,8 @@ open class WSTagsField: UIView {
 
     /// Called when a tag has been added. You should use this opportunity to update your local list of selected items.
     open var onDidAddTag: ((WSTagsField, _ tag: WSTag) -> Void)?
+    
+    open var onDidAddTagView: ((WSTagsField, _ tag: WSTagView) -> Void)?
 
     /// Called when a tag has been removed. You should use this opportunity to update your local list of selected items.
     open var onDidRemoveTag: ((WSTagsField, _ tag: WSTag) -> Void)?
@@ -236,6 +238,17 @@ open class WSTagsField: UIView {
         super.init(coder: aDecoder)
         internalInit()
     }
+    
+    
+    @available(iOSApplicationExtension 11.0, *)
+    public func textDroppableView(_ textDroppableView: UIView, proposalForDrop drop: UITextDropRequest) -> UITextDropProposal {
+        if textDroppableView.hashValue == textField.hashValue {
+            return UITextDropProposal.init(operation: UIDropOperation.cancel)
+        } else {
+            return UITextDropProposal.init(operation: UIDropOperation.move)
+        }
+    }
+    
 
     fileprivate func internalInit() {
         textColor = .white
@@ -244,6 +257,12 @@ open class WSTagsField: UIView {
 
         textField.backgroundColor = .clear
         textField.autocorrectionType = UITextAutocorrectionType.no
+        if #available(iOSApplicationExtension 11.0, *) {
+            textField.textDragInteraction?.isEnabled = false
+            textField.textDropInteraction?.allowsSimultaneousDropSessions = false
+            textField.textDropDelegate = self
+        }
+        
         textField.autocapitalizationType = UITextAutocapitalizationType.none
         textField.spellCheckingType = .no
         textField.delegate = self
@@ -448,6 +467,9 @@ open class WSTagsField: UIView {
         if let didAddTagEvent = onDidAddTag {
             didAddTagEvent(self, tag)
         }
+        if let didAddTagEventView = onDidAddTagView {
+            didAddTagEventView(self,tagView)
+        }
 
         // Clearing text programmatically doesn't call this automatically
         onTextFieldDidChange(self.textField)
@@ -455,6 +477,16 @@ open class WSTagsField: UIView {
         updatePlaceholderTextVisibility()
         repositionViews()
     }
+    
+//    open func enableDragging(on view: UIView, dragInteractionDelegate: UIDragInteractionDelegate) {
+//        let dragInteraction = UIDragInteraction(delegate: dragInteractionDelegate)
+//        view.addInteraction(dragInteraction)
+//    }
+//
+//    open func enableDropping(on view: UIView, dropInteractionDelegate: UIDropInteractionDelegate) {
+//        let dropInteraction = UIDropInteraction(delegate: dropInteractionDelegate)
+//        view.addInteraction(dropInteraction)
+//    }
 
     open func removeTag(_ token: String) {
         removeTag(WSTag("", token))
@@ -593,6 +625,7 @@ extension WSTagsField: UITextFieldDelegate {
 
 }
 
+
 private protocol BackspaceDetectingTextFieldDelegate: UITextFieldDelegate {
     /// Notify whenever the backspace key is pressed
     func textFieldDidDeleteBackwards(_ textField: UITextField)
@@ -605,6 +638,8 @@ private class BackspaceDetectingTextField: UITextField {
     init() {
         super.init(frame: CGRect.zero)
     }
+    
+
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -619,3 +654,4 @@ private class BackspaceDetectingTextField: UITextField {
     }
     
 }
+
