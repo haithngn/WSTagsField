@@ -280,7 +280,7 @@ open class WSTagsField: UIView, UITextDropDelegate{
             }
         }
 
-        textField.addTarget(self, action: #selector(onTextFieldDidChange(_:)), for:UIControlEvents.editingChanged)
+        textField.addTarget(self, action: #selector(onTextFieldDidChange(_:)), for:UIControl.Event.editingChanged)
 
         intrinsicContentHeight = WSTagsField.STANDARD_ROW_HEIGHT
         repositionViews()
@@ -537,7 +537,7 @@ open class WSTagsField: UIView, UITextDropDelegate{
 
     // MARK: - Actions
 
-    open func onTextFieldDidChange(_ sender: AnyObject) {
+    @objc open func onTextFieldDidChange(_ sender: AnyObject) {
         if let didChangeTextEvent = onDidChangeText {
             didChangeTextEvent(self, textField.text)
         }
@@ -633,7 +633,7 @@ private protocol BackspaceDetectingTextFieldDelegate: UITextFieldDelegate {
 
 private class BackspaceDetectingTextField: UITextField {
 
-    var onDeleteBackwards: Optional<()->()>
+    var onDeleteBackwards: Optional<()->()> = nil
 
     init() {
         super.init(frame: CGRect.zero)

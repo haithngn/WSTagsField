@@ -69,9 +69,9 @@ open class WSTagView: UIView {
         }
     }
 
-    internal var onDidRequestDelete: Optional<(_ tagView: WSTagView, _ replacementText: String?)->()>
-    internal var onDidRequestSelection: Optional<(_ tagView: WSTagView)->()>
-    internal var onDidInputText: Optional<(_ tagView: WSTagView, _ text: String)->()>
+    internal var onDidRequestDelete: Optional<(_ tagView: WSTagView, _ replacementText: String?)->()> = nil
+    internal var onDidRequestSelection: Optional<(_ tagView: WSTagView)->()> = nil
+    internal var onDidInputText: Optional<(_ tagView: WSTagView, _ text: String)->()> = nil
 
     open var selected: Bool = false {
         didSet {
@@ -207,7 +207,7 @@ open class WSTagView: UIView {
 
     // MARK: - Gesture Recognizers
 
-    func handleTapGestureRecognizer(_ sender: UITapGestureRecognizer) {
+    @objc func handleTapGestureRecognizer(_ sender: UITapGestureRecognizer) {
         if let didRequestSelectionEvent = onDidRequestSelection {
             didRequestSelectionEvent(self)
         }
