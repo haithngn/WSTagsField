@@ -238,9 +238,9 @@ open class WSTagsField: UIView, UITextDropDelegate{
         super.init(coder: aDecoder)
         internalInit()
     }
+
     
-    
-    @available(iOSApplicationExtension 11.0, *)
+    @available(iOS 11.0, *)
     public func textDroppableView(_ textDroppableView: UIView, proposalForDrop drop: UITextDropRequest) -> UITextDropProposal {
         if textDroppableView.hashValue == textField.hashValue {
             return UITextDropProposal.init(operation: UIDropOperation.cancel)
@@ -257,7 +257,7 @@ open class WSTagsField: UIView, UITextDropDelegate{
 
         textField.backgroundColor = .clear
         textField.autocorrectionType = UITextAutocorrectionType.no
-        if #available(iOSApplicationExtension 11.0, *) {
+        if #available(iOS 11.0, *) {
             textField.textDragInteraction?.isEnabled = false
             textField.textDropInteraction?.allowsSimultaneousDropSessions = false
             textField.textDropDelegate = self
